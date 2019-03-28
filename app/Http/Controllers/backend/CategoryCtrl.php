@@ -54,6 +54,7 @@ class CategoryCtrl extends Controller
             $row->name = $request->input('cat_name');
             $row->active = $request->input('active');
             $row->save();
+            // \DB::table('categories')->where('id',$id)->update(['name'=>$request->input('cat_name')]);
             Session::flash('success', 'Category Updated Successfully');
             return Redirect::to('dashboard/categories');
         } catch (\Exception $e) {

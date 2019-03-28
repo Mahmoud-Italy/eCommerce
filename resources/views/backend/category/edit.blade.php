@@ -8,7 +8,11 @@
                 <h4 class="page-title">Categories</h4>
                 <div class="clearfix"></div>
              </div>
-              <!--End Page Title-->          
+              <!--End Page Title-->     
+
+              @if(Session::has('error'))
+                <p class="alert alert-danger">{{Session::get('error')}}</p>
+              @endif     
            
            
                <!--Start row-->
