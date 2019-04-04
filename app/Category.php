@@ -7,7 +7,10 @@ use Illuminate\Database\Eloquent\Model;
 class Category extends Model
 {
 
-
+    public function childs() {
+      return $this->hasMany('App\Category', 'parent_id', 'id'); 
+    }
+    
     static public function getCategoryName($catid)
     {
     	if(self::where('id',$catid)->count()) {

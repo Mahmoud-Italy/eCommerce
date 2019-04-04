@@ -45,7 +45,7 @@
                                 <div class="tabs__checkbox">
                                     <input type="checkbox">
                                     <span> Remember me</span>
-                                    <span class="forget"><a href="#">Forget Pasword?</a></span>
+                                    <span class="forget"><a href="{{ url('forget-pwd') }}">Forget Pasword?</a></span>
                                 </div>
                                 <div class="htc__login__btn mt--30">
                                     <button>Login</button>

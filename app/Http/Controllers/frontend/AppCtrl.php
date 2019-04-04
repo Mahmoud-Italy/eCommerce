@@ -3,7 +3,9 @@
 namespace App\Http\Controllers\frontend;
 
 use Auth;
+use Hash;
 use Session;
+use Redirect;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\User;
@@ -61,15 +63,77 @@ class AppCtrl extends Controller
             $row->save();
             \Session::flash('success','User Register Successfully');
         } catch(\Exception $e) {
-            \Session::flash('error','Semething went wrong');
+            \Session::flash('error','Something went wrong '.$e);
         }
         return \Redirect::back();
+    }
+
+    #Forget Password
+    public function forget()
+    {
+       return view('frontend.pages.forget');
+    }
+    public function doForget(Request $request)
+    {
+        #Validation
+        $request->validate([
+                'email' => 'required|email',
+        ]);
+
+        try {
+            $email = $request->input('email');
+            if(User::where('email',$email)->count() == 0) {
+                Session::flash('error', 'Email Address is not exists');
+            } else {
+                //1. Update User
+                $row = User::where('email',$email)->first();
+                $row->activation_key = $row->id.''.uniqid(md5($email));
+                $row->save();
+
+                //2. Send Reset Link
+                Session::flash('success', 'Please Click link below to reset your password');
+                Session::flash('key', $row->activation_key);
+            }
+        } catch (\Exception $e) {
+            Session::flash('error', 'Something went wrong '.$e);
+        }
+        return Redirect::back();
+    }
+
+    #Reset Password
+    public function reset($key)
+    {
+        if(User::where('activation_key',$key)->count() == 0) {
+            Session::flash('error', 'Activation key expired');
+            return Redirect::back();
+        } else {
+            return view('frontend.pages.reset');
+        }
+    }
+
+    public function doReset($key,Request  $request)
+    {
+       if(User::where('activation_key',$key)->count() == 0) {
+          Session::flash('error', 'Activation key expired');
+          return Redirect::back();
+       } else if ($request->input('password') != $request->input('confirm_password')) {
+         Session::flash('error', 'Passwords Not Match');
+         return Redirect::back();
+       } else {
+          $row = User::where('activation_key',$key)->first();
+          $row->password = Hash::make($request->input('password'));
+          $row->activation_key = NULL;
+          $row->save();
+          Session::flash('success', 'Password Reset Successfully');
+          return Redirect::to('login');
+       }
+       
     }
 
     public function logout() 
     {
        \Auth::logout();
-       return \Redirect::back();
+       return Redirect::back();
     }
 
 
