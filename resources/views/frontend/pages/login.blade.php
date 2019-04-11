@@ -17,6 +17,8 @@
                        <p class="alert alert-danger">{{Session::get('error')}}</p>
                     @endif
 
+                        
+
                     @if ($errors->any())
                         <div class="alert alert-danger">
                             <ul>

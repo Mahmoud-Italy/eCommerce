@@ -6,7 +6,7 @@
         </div>
 
         <div class="logo-icon text-center">
-            <a href="index.html"><img src="{{ url('backend/assets/images/logo-icon.png') }}" alt=""></a>
+            <a href="{{ url('/') }}"><img src="{{ url('backend/assets/images/logo-icon.png') }}" alt=""></a>
         </div>
         <!--logo-->
 
@@ -15,6 +15,13 @@
             <ul class="nav nav-pills nav-stacked custom-nav">
                 <li class="menu-list nav-active">
                     <a href="#"><i class="icon-home"></i> <span>Dashboard</span></a>
+                </li>
+
+                <li class="menu-list"><a href="#"><i class="icon-layers"></i> <span>Slides</span></a>
+                    <ul class="sub-menu-list">
+                        <li><a href="{{ url('dashboard/slides') }}"> All Slides</a></li>
+                        <li><a href="{{ url('dashboard/slides/create') }}"> Create New Slide</a></li>
+                    </ul>
                 </li>
 
                 <li class="menu-list"><a href="#"><i class="icon-layers"></i> <span>Categories</span></a>

@@ -48,23 +48,42 @@ class AppCtrl extends Controller
     public function doRegister(Request $request)
     {
             #Validation 
-            $request->validate([
-                'name' => 'required|max:255',
-                'email' => 'required|email|unique:users',
-                'password' => 'required|min:6'
-            ]);
+            // $request->validate([
+            //     'name' => 'required|max:255',
+            //     'email' => 'required|email|unique:users',
+            //     'password' => 'required|min:6'
+            // ]);
 
-        try {
-            #Create New User
-            $row = new User;
-            $row->name = $request->input('name');
-            $row->email = $request->input('email');
-            $row->password = \Hash::make($request->input('password'));
-            $row->save();
-            \Session::flash('success','User Register Successfully');
-        } catch(\Exception $e) {
-            \Session::flash('error','Something went wrong '.$e);
-        }
+                $emptErrors=array();
+                $name=$request->input('name');
+                $mail=$request->input('email');
+                $password=$request->input('password');
+                
+                if(!$name) {
+                    $emptErrors[] = 'name Required';
+                }
+                if(!$mail) {
+                    $emptErrors[] = 'Email Required';
+                }
+                if(!$password) {
+                    $emptErrors[] = 'Password Required';
+                }
+              
+
+                Session::put('emptErrors', $emptErrors); 
+   
+
+        // try {
+        //     #Create New User
+        //     $row = new User;
+        //     $row->name = $request->input('name');
+        //     $row->email = $request->input('email');
+        //     $row->password = \Hash::make($request->input('password'));
+        //     $row->save();
+        //     \Session::flash('success','User Register Successfully');
+        // } catch(\Exception $e) {
+        //     \Session::flash('error','Something went wrong '.$e);
+        // }
         return \Redirect::back();
     }
 

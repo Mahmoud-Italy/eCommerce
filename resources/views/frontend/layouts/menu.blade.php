@@ -7,7 +7,7 @@
             <ul>
                  
 
-            @foreach(App\Category::where('active',1)->where('parent_id',0)->get() as $cat)
+@foreach(App\Category::where('active',1)->where('parent_id',0)->get() as $cat)
                 <li><a href="#">
                     <img alt="" src="images/icons/thum2.png"> {{$cat->name}} 
                     @if(count($cat->childs))<i class="zmdi zmdi-chevron-right"></i> @endif</a>

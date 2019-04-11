@@ -29,7 +29,16 @@ Route::get('/','frontend\AppCtrl@index');
 #Login
 Route::get('login', 'frontend\AppCtrl@login');
 Route::post('login', 'frontend\AppCtrl@doLogin');
+#Register
 Route::post('register', 'frontend\AppCtrl@doRegister');
+#Forget Password
+Route::get('forget-pwd', 'frontend\AppCtrl@forget');
+Route::post('forget-pwd', 'frontend\AppCtrl@doForget');
+#Reset Password
+Route::get('reset-pwd/{key}', 'frontend\AppCtrl@reset');
+Route::post('reset-pwd/{key}', 'frontend\AppCtrl@doReset');
+
+
 Route::get('logout', 'frontend\AppCtrl@logout');
 
 
@@ -42,45 +51,52 @@ Route::get('cart', 'frontend\AppCtrl@cart');
 
 
 
+Route::group(['prefix'=>'dashboard'],function(){
 
-
-
-Route::get('dashboard', 'backend\DashCtrl@index');
+#Dash
+Route::get('/', 'backend\DashCtrl@index');
 
 #Category
-Route::get('dashboard/categories', 'backend\CategoryCtrl@index');
-Route::get('dashboard/categories/create', 'backend\CategoryCtrl@create');
-Route::post('dashboard/categories/create', 'backend\CategoryCtrl@store');
-Route::get('dashboard/categories/edit/{catId}', 'backend\CategoryCtrl@edit');
-Route::post('dashboard/categories/edit/{catId}', 'backend\CategoryCtrl@update');
-Route::post('dashboard/categories/destroy/{catId}', 'backend\CategoryCtrl@destroy');
+Route::get('categories', 'backend\CategoryCtrl@index');
+Route::get('categories/create', 'backend\CategoryCtrl@create');
+Route::post('categories/create', 'backend\CategoryCtrl@store');
+Route::get('categories/edit/{catId}', 'backend\CategoryCtrl@edit');
+Route::post('categories/edit/{catId}', 'backend\CategoryCtrl@update');
+Route::post('categories/destroy/{catId}', 'backend\CategoryCtrl@destroy');
 
 #Products
-Route::get('dashboard/products', 'backend\ProductCtrl@index');
-Route::get('dashboard/products/create', 'backend\ProductCtrl@create');
-Route::post('dashboard/products/create', 'backend\ProductCtrl@store');
-Route::get('dashboard/products/edit/{proId}', 'backend\ProductCtrl@edit');
-Route::post('dashboard/products/edit/{proId}', 'backend\ProductCtrl@update');
-Route::post('dashboard/products/destroy/{proId}', 'backend\ProductCtrl@destroy');
+Route::get('products', 'backend\ProductCtrl@index');
+Route::get('products/create', 'backend\ProductCtrl@create');
+Route::post('products/create', 'backend\ProductCtrl@store');
+Route::get('products/edit/{proId}', 'backend\ProductCtrl@edit');
+Route::post('products/edit/{proId}', 'backend\ProductCtrl@update');
+Route::post('products/destroy/{proId}', 'backend\ProductCtrl@destroy');
 
 #Orders
-Route::get('dashboard/orders', 'backend\OrderCtrl@index');
-Route::get('dashboard/orders/new', 'backend\OrderCtrl@new');
-Route::get('dashboard/orders/pending', 'backend\OrderCtrl@pending');
-Route::get('dashboard/orders/completed', 'backend\OrderCtrl@completed');
+Route::get('orders', 'backend\OrderCtrl@index');
+Route::get('orders/new', 'backend\OrderCtrl@new');
+Route::get('orders/pending', 'backend\OrderCtrl@pending');
+Route::get('orders/completed', 'backend\OrderCtrl@completed');
+
+#SlideShow
+Route::get('slides','backend\SlideCtrl@index');
+Route::get('slides/create', 'backend\SlideCtrl@create');
+Route::post('slides/create', 'backend\SlideCtrl@store');
+Route::get('slides/edit/{id}','backend\SlideCtrl@edit');
+Route::post('slides/edit/{id}','backend\SlideCtrl@update');
+Route::post('slides/destroy/{id}','backend\SlideCtrl@destroy');
 
 
 #Members
-Route::get('dashboard/members', 'backend/MemberCtrl@index');
-Route::post('dashboard/members/suspend/{id}', 'backend\MemberCtrl@suspend');
-Route::post('dashboard/members/restore/{id}', 'backend\MemberCtrl@restore');
+Route::get('members', 'backend/MemberCtrl@index');
+Route::post('members/suspend/{id}', 'backend\MemberCtrl@suspend');
+Route::post('members/restore/{id}', 'backend\MemberCtrl@restore');
 
 
 #Settings
-Route::get('dashboard/settings', 'backend\SettingCtrl@index');
-Route::post('dashboard/settings/meta', 'backend\SettingCtrl@metaTags');
-
-
+Route::get('settings', 'backend\SettingCtrl@index');
+Route::post('settings/meta', 'backend\SettingCtrl@metaTags');
+});
 
 
 

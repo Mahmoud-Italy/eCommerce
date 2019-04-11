@@ -1,7 +1,7 @@
 @extends('frontend.layouts.app')
 @section('content')
 
- <!-- Start Feature Product -->
+    <!-- Start Feature Product -->
         <section class="categories-slider-area bg__white">
             <div class="container">
                 <div class="row">
