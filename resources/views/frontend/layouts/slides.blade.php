@@ -3,7 +3,7 @@
         <div class="slider__activation__wrap owl-carousel owl-theme">
 
         @foreach(App\Slide::where('active',1)->orderBy('sort','ASC')->get() as $slide)
-             <div class="slide slider__full--screen slider-height-inherit slider-text-right" style="background: rgba(0, 0, 0, 0) url({{ url($slide->image)}}) no-repeat scroll center center / cover ;">
+             <div class="slide slider__full--screen slider-height-inherit slider-text-right" style="background: rgba(0, 0, 0, 0) url({{ url($slide->image)}}) no-repeat scroll center center / cover ;height:450px">
                 <div class="container">
                     <div class="row">
                         <div class="col-md-10 col-lg-8 col-md-offset-2 col-lg-offset-4 col-sm-12 col-xs-12">

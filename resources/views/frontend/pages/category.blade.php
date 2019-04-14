@@ -9,11 +9,11 @@
                     <div class="row">
                         <div class="col-xs-12">
                             <div class="bradcaump__inner text-center">
-                                <h2 class="bradcaump-title">Shop Page</h2>
+                                <h2 class="bradcaump-title">{{$cat->name}}</h2>
                                 <nav class="bradcaump-inner">
-                                  <a class="breadcrumb-item" href="index.html">Home</a>
+                                  <a class="breadcrumb-item" href="{{ url('/') }}">Home</a>
                                   <span class="brd-separetor">/</span>
-                                  <span class="breadcrumb-item active">Shop Page</span>
+                                  <span class="breadcrumb-item active">{{$cat->name}}</span>
                                 </nav>
                             </div>
                         </div>
@@ -34,7 +34,7 @@
             <div class="container">
                 <div class="htc__product__container">
                     <!-- Start Product MEnu -->
-                    <div class="row">
+                    <div class="row" style="display: none;">
                         <div class="col-md-12">
                             <div class="filter__menu__container">
                                 <div class="product__menu">
@@ -127,14 +127,14 @@
 
 
 
-                        @for($i = 1; $i < 20; $i++)
+                        @foreach($data as $pro)
                             <!-- Start Single Product -->
                             <div class="col-md-3 single__pro col-lg-3 cat--1 col-sm-4 col-xs-12">
                                 <div class="product foo">
                                     <div class="product__inner">
                                         <div class="pro__thumb">
                                             <a href="#">
-                                                <img src="{{ url('frontend/images/product/1.png') }}" alt="product images">
+                                                <img src="{{ url($pro->image) }}" alt="product images">
                                             </a>
                                         </div>
                                         <div class="product__hover__info">
@@ -146,16 +146,19 @@
                                         </div>
                                     </div>
                                     <div class="product__details">
-                                        <h2><a href="product-details.html">Simple Black Clock</a></h2>
+                                        <h2><a href="product-details.html">{{$pro->name}}</a></h2>
                                         <ul class="product__price">
-                                            <li class="old__price">$16.00</li>
-                                            <li class="new__price">$10.00</li>
+                                            @if($pro->price_discount > 0)
+                                            <li class="old__price">{{$pro->price_discount}}
+                                            </li>
+                                            @endif
+                                            <li class="new__price">{{$pro->price}}</li>
                                         </ul>
                                     </div>
                                 </div>
                             </div>
                             <!-- End Single Product -->
-                            @endfor
+                            @endforeach
 
 
 
