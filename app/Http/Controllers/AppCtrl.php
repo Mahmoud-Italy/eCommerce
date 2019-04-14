@@ -73,6 +73,8 @@ class AppCtrl extends Controller
     	return Redirect::back();
     }
 
+    
+
 
 
 }

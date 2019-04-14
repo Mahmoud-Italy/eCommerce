@@ -9,6 +9,8 @@ use Redirect;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\User;
+use App\Category;
+use App\Product;
 
 class AppCtrl extends Controller
 {
@@ -160,9 +162,16 @@ class AppCtrl extends Controller
 
 
 
-    public function category()
+    
+        #Category
+    public function category($name,$id)
     {
-        return view('frontend.pages.category');
+        if(!$id || Category::where('id',$id)->count() == 0) {
+            return \App::abort(404);
+        }
+        $cat = Category::find($id);
+        $data = Product::where('active',1)->where('cat_id',$id)->get();
+        return view('frontend.pages.category')->withcat($cat)->withdata($data);
     }
 
     public function contact()

@@ -38,16 +38,17 @@ Route::post('forget-pwd', 'frontend\AppCtrl@doForget');
 Route::get('reset-pwd/{key}', 'frontend\AppCtrl@reset');
 Route::post('reset-pwd/{key}', 'frontend\AppCtrl@doReset');
 
-
 Route::get('logout', 'frontend\AppCtrl@logout');
 
 
-Route::get('category','frontend\AppCtrl@category');
+
 Route::get('contact', 'frontend\AppCtrl@contact');
 Route::get('search', 'frontend\AppCtrl@search');
 Route::get('cart', 'frontend\AppCtrl@cart');
 
 
+#Category
+Route::get('subcat/{name}/{id}', 'frontend\AppCtrl@category');
 
 
 
