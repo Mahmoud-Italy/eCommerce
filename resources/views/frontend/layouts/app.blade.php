@@ -6,7 +6,7 @@
     <title>Tmart-Minimalist eCommerce HTML5 Template</title>
     <meta name="description" content="">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    
+    <meta name="csrf-token" content="{!! csrf_token() !!}">
     <!-- Place favicon.ico in the root directory -->
     <link rel="shortcut icon" type="image/x-icon" href="images/favicon.ico">
     <link rel="apple-touch-icon" href="apple-touch-icon.png">
@@ -213,6 +213,7 @@
     <script src="{{ url('frontend/js/owl.carousel.min.js') }}"></script>
     <script src="{{ url('frontend/js/waypoints.min.js') }}"></script>
     <script src="{{ url('frontend/js/main.js') }}"></script>
+    @include('frontend.layouts.jsCode')
 
 </body>
 

@@ -12,7 +12,7 @@
                             <div class="bradcaump__inner text-center">
                                 <h2 class="bradcaump-title">Cart</h2>
                                 <nav class="bradcaump-inner">
-                                  <a class="breadcrumb-item" href="index.html">Home</a>
+                                  <a class="breadcrumb-item" href="{{ url('/') }}">Home</a>
                                   <span class="brd-separetor">/</span>
                                   <span class="breadcrumb-item active">Cart</span>
                                 </nav>
@@ -23,6 +23,9 @@
             </div>
         </div>
         <!-- End Bradcaump area -->
+
+
+
         <!-- cart-main-area start -->
         <div class="cart-main-area ptb--120 bg__white">
             <div class="container">
@@ -42,25 +45,35 @@
                                         </tr>
                                     </thead>
                                     <tbody>
+                                    @if(count($data) == 0)
+                                      <tr><td colspan="6">No Data Found.</td></tr>
+                                    @endif
+                                @foreach($data as $row)
+                                    @foreach(App\Product::where('id',$row->pro_id)->get() as $pro)
                                         <tr>
-                                            <td class="product-thumbnail"><a href="#"><img src="images/product/4.png" alt="product img" /></a></td>
-                                            <td class="product-name"><a href="#">Vestibulum suscipit</a></td>
-                                            <td class="product-price"><span class="amount">£165.00</span></td>
-                                            <td class="product-quantity"><input type="number" value="1" /></td>
-                                            <td class="product-subtotal">£165.00</td>
-                                            <td class="product-remove"><a href="#">X</a></td>
+                                            <td class="product-thumbnail">
+                                                <a href="#">
+                                                    <img src="{{ url($pro->image) }}" alt="product img" /></a>
+                                            </td>
+                                            <td class="product-name"><a href="#">{{$pro->name}}</a></td>
+                                            <td class="product-price"><span class="amount">{{$pro->price}} EGP</span></td>
+                                            <td class="product-quantity">
+                                                <input type="number" value="1" /></td>
+                                            <td class="product-subtotal">
+                                                {{$pro->price*$row->qty}}</td>
+                                            <td class="product-remove">
+                                                {!! Form::Open(['remove/item/cart/'.$row->id]) !!}
+                                                <button>X</button>
+                                                {!! Form::Close() !!}
+                                            </td>
                                         </tr>
-                                        <tr>
-                                            <td class="product-thumbnail"><a href="#"><img src="images/product/3.png" alt="product img" /></a></td>
-                                            <td class="product-name"><a href="#">Vestibulum dictum magna</a></td>
-                                            <td class="product-price"><span class="amount">£50.00</span></td>
-                                            <td class="product-quantity"><input type="number" value="1" /></td>
-                                            <td class="product-subtotal">£50.00</td>
-                                            <td class="product-remove"><a href="#">X</a></td>
-                                        </tr>
+                                    @endforeach
+                                @endforeach
                                     </tbody>
                                 </table>
                             </div>
+
+                            @if(count($data) > 0)
                             <div class="row">
                                 <div class="col-md-8 col-sm-7 col-xs-12">
                                     <div class="buttons-cart">
@@ -118,6 +131,7 @@
                                     </div>
                                 </div>
                             </div>
+                            @endif
                         </form> 
                     </div>
                 </div>

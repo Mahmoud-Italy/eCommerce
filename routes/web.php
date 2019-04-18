@@ -24,6 +24,7 @@
 
 
 
+#Home
 Route::get('/','frontend\AppCtrl@index');
 
 #Login
@@ -37,21 +38,31 @@ Route::post('forget-pwd', 'frontend\AppCtrl@doForget');
 #Reset Password
 Route::get('reset-pwd/{key}', 'frontend\AppCtrl@reset');
 Route::post('reset-pwd/{key}', 'frontend\AppCtrl@doReset');
-
 Route::get('logout', 'frontend\AppCtrl@logout');
-
 
 
 Route::get('contact', 'frontend\AppCtrl@contact');
 Route::get('search', 'frontend\AppCtrl@search');
-Route::get('cart', 'frontend\AppCtrl@cart');
 
+Route::get('cart', 'frontend\AppCtrl@cart');
+Route::post('ajax/AddToCart', 'frontend\AppCtrl@addCart');
+Route::get('wishlist', 'frontend\AppCtrl@wishlist');
+Route::post('ajax/AddToWishlist', 'frontend\AppCtrl@addWishlist');
+Route::post('remove/wishlist/{id}','frontend\AppCtrl@destroyWishlist');
 
 #Category
 Route::get('subcat/{name}/{id}', 'frontend\AppCtrl@category');
 
 
 
+
+
+
+
+
+
+
+#Admin
 Route::group(['prefix'=>'dashboard'],function(){
 
 #Dash

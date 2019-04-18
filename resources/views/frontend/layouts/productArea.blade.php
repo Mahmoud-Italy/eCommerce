@@ -61,8 +61,17 @@
                                                         <div class="product__hover__info">
                                                             <ul class="product__action">
                                                                 <li><a data-toggle="modal" data-target="#productModal{{$pro->id}}" title="Quick View" class="quick-view modal-view detail-link" href="#"><span class="ti-plus"></span></a></li>
-                                                                <li><a title="Add TO Cart" href="cart.html"><span class="ti-shopping-cart"></span></a></li>
-                                                                <li><a title="Wishlist" href="wishlist.html"><span class="ti-heart"></span></a></li>
+        <li>
+            <a title="Add TO Cart" data-id="{{$pro->id}}" class="AddToCart">
+                <span id="cartIcon_{{$pro->id}}" class="ti-shopping-cart"></span></a>
+        </li>
+        
+        <li>
+            <a title="Wishlist" data-id="{{$pro->id}}" class="AddToWishlist" 
+                style="cursor: pointer">
+            <span id="wishIcon_{{$pro->id}}" class="ti-heart"></span></a>
+        </li>
+
                                                             </ul>
                                                         </div>
                                                     </div>

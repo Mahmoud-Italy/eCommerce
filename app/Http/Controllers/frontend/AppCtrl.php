@@ -9,8 +9,10 @@ use Redirect;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\User;
+use App\Cart;
 use App\Category;
 use App\Product;
+use App\Wishlist;
 
 class AppCtrl extends Controller
 {
@@ -50,42 +52,24 @@ class AppCtrl extends Controller
     public function doRegister(Request $request)
     {
             #Validation 
-            // $request->validate([
-            //     'name' => 'required|max:255',
-            //     'email' => 'required|email|unique:users',
-            //     'password' => 'required|min:6'
-            // ]);
+            $request->validate([
+                'name' => 'required|max:255',
+                'email' => 'required|email|unique:users',
+                'password' => 'required|min:6'
+            ]);
 
-                $emptErrors=array();
-                $name=$request->input('name');
-                $mail=$request->input('email');
-                $password=$request->input('password');
-                
-                if(!$name) {
-                    $emptErrors[] = 'name Required';
-                }
-                if(!$mail) {
-                    $emptErrors[] = 'Email Required';
-                }
-                if(!$password) {
-                    $emptErrors[] = 'Password Required';
-                }
-              
 
-                Session::put('emptErrors', $emptErrors); 
-   
-
-        // try {
-        //     #Create New User
-        //     $row = new User;
-        //     $row->name = $request->input('name');
-        //     $row->email = $request->input('email');
-        //     $row->password = \Hash::make($request->input('password'));
-        //     $row->save();
-        //     \Session::flash('success','User Register Successfully');
-        // } catch(\Exception $e) {
-        //     \Session::flash('error','Something went wrong '.$e);
-        // }
+        try {
+            #Create New User
+            $row = new User;
+            $row->name = $request->input('name');
+            $row->email = $request->input('email');
+            $row->password = \Hash::make($request->input('password'));
+            $row->save();
+            \Session::flash('success','User Register Successfully');
+        } catch(\Exception $e) {
+            \Session::flash('error','Something went wrong '.$e);
+        }
         return \Redirect::back();
     }
 
@@ -185,9 +169,62 @@ class AppCtrl extends Controller
     	return view('frontend.pages.search');
     }
    
-   public function cart($value='')
+   public function cart()
+   {    
+        // validation of User
+       if(!Auth::check()) { return redirect()->to('login'); }
+
+       $data = Cart::where('user_id',Auth::user()->id)->get();
+   	  return view('frontend.orders.cart')->withdata($data);
+   }
+
+
+   #Wishlist
+   public function wishlist()
    {
-   	  return view('frontend.orders.cart');
+       // validation of User
+       if(!Auth::check()) { return redirect()->to('login'); }
+
+       $data = Wishlist::where('user_id',Auth::user()->id)->get();
+       return view('frontend.orders.wishlist',compact('data'));
+   }
+   public function addWishlist(Request $request)
+   {
+       try {
+           $row = new Wishlist;
+           $row->user_id = Auth::user()->id;
+           $row->pro_id = $request->pro_id;
+           $row->save();
+           $status = true;
+       } catch (\Exception $e) {
+           $status = false;
+       }
+       return response()->json(['success'=>$status]);
+   }
+   public function addCart(Request $request)
+   {
+       try {
+           $row = new Cart;
+           $row->user_id = Auth::user()->id;
+           $row->pro_id = $request->pro_id;
+           $row->qty = 1;
+           $row->unit_price = Product::getProDetail('price', $request->pro_id); 
+           $row->save();
+           $status = true;
+       } catch (\Exception $e) {
+           $status = false;
+       }
+       return response()->json(['success'=>$status]);
+   }
+   public function destroyWishlist($id)
+   {
+       if(Wishlist::where('id',$id)->where('user_id',Auth::user()->id)->count()) {
+         Wishlist::where('id',$id)->where('user_id',Auth::user()->id)->delete();
+         Session::flash('success','Wishlist Deleted Successfully'); 
+       } else  {
+         Session::flash('error','Wishlist Access Denied'); 
+       }
+       return redirect()->back();
    }
     
 
