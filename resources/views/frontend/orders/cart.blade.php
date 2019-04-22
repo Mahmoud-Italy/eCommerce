@@ -51,16 +51,13 @@
                                 @foreach($data as $row)
                                     @foreach(App\Product::where('id',$row->pro_id)->get() as $pro)
                                         <tr>
-                                            <td class="product-thumbnail">
-                                                <a href="#">
-                                                    <img src="{{ url($pro->image) }}" alt="product img" /></a>
-                                            </td>
+                                            <td class="product-thumbnail"><a href="#"><img src="{{ url($pro->image) }}" alt="product img" /></a></td>
                                             <td class="product-name"><a href="#">{{$pro->name}}</a></td>
                                             <td class="product-price"><span class="amount">{{$pro->price}} EGP</span></td>
                                             <td class="product-quantity">
-                                                <input type="number" value="1" /></td>
-                                            <td class="product-subtotal">
-                                                {{$pro->price*$row->qty}}</td>
+                                                <input type="number" data-id="{{$pro->id}}" 
+                                                class="cartQty" value="{{$row->qty}}" /></td>
+                                            <td class="product-subtotal"><span id="subTotal-{{$pro->id}}">{{$pro->price*$row->qty}}</span></td>
                                             <td class="product-remove">
                                                 {!! Form::Open(['remove/item/cart/'.$row->id]) !!}
                                                 <button>X</button>
@@ -77,56 +74,24 @@
                             <div class="row">
                                 <div class="col-md-8 col-sm-7 col-xs-12">
                                     <div class="buttons-cart">
-                                        <input type="submit" value="Update Cart" />
-                                        <a href="#">Continue Shopping</a>
-                                    </div>
-                                    <div class="coupon">
-                                        <h3>Coupon</h3>
-                                        <p>Enter your coupon code if you have one.</p>
-                                        <input type="text" placeholder="Coupon code" />
-                                        <input type="submit" value="Apply Coupon" />
+                                        <a href="{{ url('/') }}">Continue Shopping</a>
                                     </div>
                                 </div>
                                 <div class="col-md-4 col-sm-5 col-xs-12">
                                     <div class="cart_totals">
                                         <h2>Cart Totals</h2>
                                         <table>
-                                            <tbody>
-                                                <tr class="cart-subtotal">
-                                                    <th>Subtotal</th>
-                                                    <td><span class="amount">£215.00</span></td>
-                                                </tr>
-                                                <tr class="shipping">
-                                                    <th>Shipping</th>
-                                                    <td>
-                                                        <ul id="shipping_method">
-                                                            <li>
-                                                                <input type="radio" /> 
-                                                                <label>
-                                                                    Flat Rate: <span class="amount">£7.00</span>
-                                                                </label>
-                                                            </li>
-                                                            <li>
-                                                                <input type="radio" /> 
-                                                                <label>
-                                                                    Free Shipping
-                                                                </label>
-                                                            </li>
-                                                            <li></li>
-                                                        </ul>
-                                                        <p><a class="shipping-calculator-button" href="#">Calculate Shipping</a></p>
-                                                    </td>
-                                                </tr>
+                                            <tbody><br/><br/>
                                                 <tr class="order-total">
                                                     <th>Total</th>
                                                     <td>
-                                                        <strong><span class="amount">£215.00</span></strong>
+                                                        <strong><span id="cartTotal" class="amount">{{App\Cart::getTotal()}}</span></strong>
                                                     </td>
                                                 </tr>                                           
                                             </tbody>
                                         </table>
-                                        <div class="wc-proceed-to-checkout">
-                                            <a href="checkout.html">Proceed to Checkout</a>
+                                        <div class="wc-proceed-to-checkout"><br/><br/><br/>
+                                            <a href="{{ url('checkout') }}">Proceed to Checkout</a>
                                         </div>
                                     </div>
                                 </div>
@@ -139,4 +104,33 @@
         </div>
         <!-- cart-main-area end -->
 
+@stop
+
+@section('jsCode')
+<script>
+    $(function(){
+        $(".cartQty").change(function(){
+            var pro_id = $(this).attr('data-id');
+            var qty = $(this).val();
+            var Url = "{{ url('ajax/UpdateQty') }}";
+            $("span#subTotal-"+pro_id).text('Loading...');
+            $("span#cartTotal").text('Loading...');
+            $.ajaxSetup({ headers: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')}});
+            $.ajax({
+                url: Url,
+                type: 'POST',
+                data: {pro_id:pro_id, qty:qty},
+                datatype: 'json',
+                success:function(data) {
+                     if(data.success) {
+                         $("span#cartTotal").text(data.Total);
+                         $("span#subTotal-"+pro_id).text(data.subTotal);
+                     } else {
+                        alert('something went wrong');
+                     }
+                }
+            });
+        });
+    });
+</script>
 @stop

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\frontend;
 
+use DB;
 use Auth;
 use Hash;
 use Session;
@@ -13,6 +14,8 @@ use App\Cart;
 use App\Category;
 use App\Product;
 use App\Wishlist;
+use App\Order;
+use App\User_shipping;
 
 class AppCtrl extends Controller
 {
@@ -174,7 +177,7 @@ class AppCtrl extends Controller
         // validation of User
        if(!Auth::check()) { return redirect()->to('login'); }
 
-       $data = Cart::where('user_id',Auth::user()->id)->get();
+       $data = Cart::where('user_id',Auth::user()->id)->where('status',0)->get();
    	  return view('frontend.orders.cart')->withdata($data);
    }
 
@@ -225,6 +228,75 @@ class AppCtrl extends Controller
          Session::flash('error','Wishlist Access Denied'); 
        }
        return redirect()->back();
+   }
+
+   public function updateQty(Request $request)
+   {
+      $pro_id = $request->pro_id;
+      $qty = $request->qty;
+      $subTotal = 0;
+      $Total = 0;
+
+      try {
+        // update statment
+        $row = Cart::where('user_id',Auth::user()->id)->where('pro_id',$pro_id)->first();
+        $row->qty = $qty;
+        $row->save();
+        $status = true;
+
+        // sub total
+        $subTotal = $qty * $row->unit_price;
+
+          // total
+          $data = Cart::where('user_id',Auth::user()->id)->where('status',0)->get();
+          foreach($data as $single_data) {
+              $Total += $single_data->qty * $single_data->unit_price;
+          } 
+      } catch (\Exception $e) {
+        $status = false;
+      }
+        return response()->json(['success'=>$status,'subTotal'=>$subTotal,'Total'=>$Total]);
+   }
+
+
+   public function checkout()
+   {
+      return view('frontend.orders.checkout');
+   }
+   public function doCheckout(Request $request)
+   {
+
+      if(Cart::where('status',0)->count() == 0) {
+        return redirect()->back()->with('error','No Cart Found.');
+      }
+
+      try {
+        
+        //
+        DB::beginTransaction();
+        $carts = Cart::where('user_id',Auth::user()->id)->where('status',0)->pluck('id');
+        $order = new Order;
+        $order->user_id = Auth::user()->id;
+        $order->cart_id = json_encode($carts);
+        $order->save();
+
+        Cart::where('user_id',Auth::user()->id)->where('status',0)->update(['status'=>1]);
+
+        $usr = new User_shipping;
+        $usr->user_id = Auth::user()->id;
+        $usr->order_id = $order->id;
+        $usr->address = $request->address;
+        $usr->postal_code = $request->postal_code;
+        $usr->city = $request->city;
+        $usr->country  = $request->country;
+        $usr->save();
+        DB::commit();
+
+        return redirect()->back()->with('success','Order Confirmed');
+      } catch (\Exception $e) {
+        DB::rollback();
+        return redirect()->back()->with('error','Something went wrong');
+      }
    }
     
 

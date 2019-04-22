@@ -5,7 +5,7 @@ $(function(){
 	$(".AddToWishlist").click(function(){
 		var pro_id = $(this).attr('data-id');
 		var Url = "{{ url('ajax/AddToWishlist') }}";
-		$("#wishIcon_"+pro_id).removeClass('ti-heart').text('Loading..');
+		$("span#wishIcon_"+pro_id).removeClass('ti-heart').addClass('ti-reload');
 		$.ajaxSetup({ headers: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')}});
 		$.ajax({
 			url: Url,
@@ -14,9 +14,9 @@ $(function(){
 			datatype: 'json',
 			success:function(data) {
                  if(data.success) {
-                 	$("#wishIcon_"+pro_id).text('Ok');
+                 	$("span#wishIcon_"+pro_id).removeClass('ti-reload').addClass('ti-check');
                  } else {
-                 	$("#wishIcon_"+pro_id).text('No');
+                 	$("span#wishIcon_"+pro_id).removeClass('ti-reload').addClass('ti-trash');
                  }
 			}
 		});
@@ -35,7 +35,7 @@ $(function(){
 	$(".AddToCart").click(function(){
 		var pro_id = $(this).attr('data-id');
 		var Url = "{{ url('ajax/AddToCart') }}";
-		$("#cartIcon_"+pro_id).removeClass('ti-shopping-cart').text('Loading..');
+		$("span#cartIcon_"+pro_id).removeClass('ti-shopping-cart').addClass('ti-reload');
 		$.ajaxSetup({ headers: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')}});
 		$.ajax({
 			url: Url,
@@ -44,9 +44,9 @@ $(function(){
 			datatype: 'json',
 			success:function(data) {
                  if(data.success) {
-                 	$("#cartIcon_"+pro_id).text('Ok');
+                 	$("span#cartIcon_"+pro_id).removeClass('ti-reload').addClass('ti-check');
                  } else {
-                 	$("#cartIcon_"+pro_id).text('No');
+                 	$("span#cartIcon_"+pro_id).removeClass('ti-reload').addClass('ti-trash');
                  }
 			}
 		});

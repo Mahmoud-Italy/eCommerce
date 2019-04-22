@@ -49,6 +49,10 @@ Route::post('ajax/AddToCart', 'frontend\AppCtrl@addCart');
 Route::get('wishlist', 'frontend\AppCtrl@wishlist');
 Route::post('ajax/AddToWishlist', 'frontend\AppCtrl@addWishlist');
 Route::post('remove/wishlist/{id}','frontend\AppCtrl@destroyWishlist');
+Route::post('ajax/UpdateQty', 'frontend\AppCtrl@updateQty');
+
+Route::get('checkout', 'frontend\AppCtrl@checkout');
+Route::post('checkout', 'frontend\AppCtrl@doCheckout');
 
 #Category
 Route::get('subcat/{name}/{id}', 'frontend\AppCtrl@category');

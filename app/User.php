@@ -27,4 +27,17 @@ class User extends Authenticatable
     protected $hidden = [
         'password', 'remember_token',
     ];
+
+    static public function getUsername($userid)
+    {
+        $obj = '';
+        if(self::where('id',$userid)->count()) {
+            $row = self::where('id',$userid)->first();
+            $obj = $row->name;
+        }
+        return $obj;
+    }
+
+
+
 }

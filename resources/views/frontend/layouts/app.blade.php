@@ -214,6 +214,7 @@
     <script src="{{ url('frontend/js/waypoints.min.js') }}"></script>
     <script src="{{ url('frontend/js/main.js') }}"></script>
     @include('frontend.layouts.jsCode')
+    @yield('jsCode')
 
 </body>
 

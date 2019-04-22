@@ -26,7 +26,7 @@
                                     <thead>
                                         <tr>
                                             <th>#</th>
-                                            <th>UserName</th>
+                                            <th>Username</th>
                                             <th>Invoice Id</th>
                                             <th>Total</th>
                                             <th>Status</th>
@@ -37,12 +37,15 @@
                                         @foreach($data as $key => $row)
                                         <tr>
                                             <td>{{$key+1}}</td>
-                                            <td></td>
-                                            <td></td>
-                                            <td></td>
+                                            <td>{{ App\User::getUsername($row->user_id) }}</td>
+                                            <td>{{$row->id}}</td>
+                                            <td>{{ App\Order::getTotal($row->cart_id) }}</td>
                                             <td></td>
                                             <td>
-                                            
+                                              {!! Form::Open(['url'=>'dashboard/orders/destroy/'.$row->id]) !!}
+                                              <a href="" class="btn btn-success"> View <i class="fa fa-eye"></i></a>
+                                              <button class="btn btn-danger"> Delete  <i class="fa fa-trash"></i></button>
+                                              {!! Form::Close() !!}
                                             </td>
                                         </tr>
                                         @endforeach

@@ -38,7 +38,7 @@
                                 <table>
                                     <thead>
                                         <tr>
-                                            <th class="product-name">#</th>
+                                            <th class="" style="width: 10%">#</th>
                                             <th class="product-thumbnail">Image</th>
                                             <th class="product-name">Product</th>
                                             <th class="product-price">Price</th>
