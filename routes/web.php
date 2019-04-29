@@ -12,6 +12,24 @@
 */
 
 
+use Illuminate\Support\Facades\Mail;
+
+Route::get('testMail',function(){
+
+
+    	$row = App\User::find(1);
+	    Mail::send('emails.test',['row',$row],  function($message) {
+	        $message->to('mahmoud.italy@outlook.com', 'MH')->subject('test mail from localhost');
+	    });  
+
+
+
+});
+
+
+
+
+
 
 #Old School
 //Route::resource('/','CategoryCtrl');
@@ -24,9 +42,23 @@
 
 
 
+
+Route::get('addmoney/stripe', 'frontend\AppCtrl@payWithStripe')->name('payment');
+Route::post('addmoney/stripe', 'frontend\AppCtrl@postPaymentWithStripe')->name('addmoney.stripe');
+
+$lang = 'en';
+$lang = \Request::segment(1);
+if($lang == 'ar') { App::setlocale('ar'); } 
+else { App::setlocale('en');}
+
+function isAr($lang) {
+	if($lang == 'ar') return true;
+	else return false;
+}
+
+Route::group(['prefix'=>$lang], function() use ($lang){
 #Home
 Route::get('/','frontend\AppCtrl@index');
-
 #Login
 Route::get('login', 'frontend\AppCtrl@login');
 Route::post('login', 'frontend\AppCtrl@doLogin');
@@ -39,7 +71,6 @@ Route::post('forget-pwd', 'frontend\AppCtrl@doForget');
 Route::get('reset-pwd/{key}', 'frontend\AppCtrl@reset');
 Route::post('reset-pwd/{key}', 'frontend\AppCtrl@doReset');
 Route::get('logout', 'frontend\AppCtrl@logout');
-
 
 Route::get('contact', 'frontend\AppCtrl@contact');
 Route::get('search', 'frontend\AppCtrl@search');
@@ -56,7 +87,7 @@ Route::post('checkout', 'frontend\AppCtrl@doCheckout');
 
 #Category
 Route::get('subcat/{name}/{id}', 'frontend\AppCtrl@category');
-
+});
 
 
 
@@ -87,6 +118,14 @@ Route::post('products/create', 'backend\ProductCtrl@store');
 Route::get('products/edit/{proId}', 'backend\ProductCtrl@edit');
 Route::post('products/edit/{proId}', 'backend\ProductCtrl@update');
 Route::post('products/destroy/{proId}', 'backend\ProductCtrl@destroy');
+
+#Offers
+Route::get('offers', 'backend\OfferCtrl@index');
+Route::get('offers/create', 'backend\OfferCtrl@create');
+Route::post('offers/create', 'backend\OfferCtrl@store');
+Route::get('offers/edit/{proId}', 'backend\OfferCtrl@edit');
+Route::post('offers/edit/{proId}', 'backend\OfferCtrl@update');
+Route::post('offers/destroy/{proId}', 'backend\OfferCtrl@destroy');
 
 #Orders
 Route::get('orders', 'backend\OrderCtrl@index');

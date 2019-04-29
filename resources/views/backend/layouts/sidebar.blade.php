@@ -38,6 +38,13 @@
                     </ul>
                 </li>
 
+                <li class="menu-list"><a href="#"><i class="icon-grid"></i> <span>Offers</span></a>
+                    <ul class="sub-menu-list">
+                        <li><a href="{{ url('dashboard/offers') }}"> All Offers</a></li>
+                        <li><a href="{{ url('dashboard/offers/create') }}">Create New Offer</a></li>
+                    </ul>
+                </li>
+
 
 
                 <li class="menu-list"><a href="#"><i class="icon-grid"></i> <span>Orders</span></a>

@@ -47,7 +47,8 @@ class ProductCtrl extends Controller
             $file = $request->file('image');
             $path = 'uploads/products/';
             $filename = time().'.'.$file->getClientOriginalExtension();
-            Image::make($file)->save(public_path().'/'.$path.$filename, 90);
+            // ->resize(300,200) to crop images to this diemention
+            Image::make($file)->save(public_path().'/'.$path.$filename, 100)->resize(300, 200);
 
             $row->image = $path.$filename;
             $row->name = $request->input('name');

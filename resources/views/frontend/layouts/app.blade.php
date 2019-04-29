@@ -216,6 +216,24 @@
     @include('frontend.layouts.jsCode')
     @yield('jsCode')
 
+    <script>
+        $(function() {
+            var pageUrl = 'https://www.google.com';
+
+           
+           $(".social-share-fb").on("click", function() {
+                url = "https://www.facebook.com/sharer.php?u=" + pageUrl;
+                window.open(url);
+          });
+
+           $(".social-share-tw").on("click", function() {
+                url = "https://twitter.com/intent/tweet?url=" + pageUrl;
+                window.open(url);
+            });
+
+        });
+    </script>
+
 </body>
 
 </html>
